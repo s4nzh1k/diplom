@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Service - Мои заявки</title>
+    <style>
+        table.application {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table.application thead {
+            background-color: #f9f9f9;
+        }
+
+        table.application th,
+        table.application td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        table.application th {
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table.application tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table.application tr:hover {
+            background-color: #ddd;
+        }
+
+        .application_header {
+            margin-bottom: 10px;
+        }
+
+        .btn_edit {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bebas+Neue&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="menu">
+        <div style="display: flex; align-items: center; justify-content: flex-start;">
+            <div style="position: fixed; top: 10px; right: 1450px;">
+                <a href="/" style="text-decoration: none;">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Логотип" style="height: 120px;">
+                </a>
+            </div>
+        {% if name %}
+        <p class="auth1">Вы авторизованы как {{ name }}</p>
+            <a href="/logout" class="btn">Выйти</a>
+        {% else %}
+            <button onclick="openModal('loginModal')" class="btn">Вход</button>
+            <button onclick="openModal('registerModal')" class="btn">Регистрация</button>
+        {% endif %}
+        </div>
+    </div>
+
+    <!-- Блок с горизонтальным меню -->
+    <div style="position: fixed; top: 0; right: 0; background-color: #FFFFFF; width: 100%;">
+    </div>
+
+    <div style="margin-top: 170px;">
+        <h1 class="center">Мои заявки</h1>
+        {% if user_applications %}
+        <table class="application">
+                <tr>
+                    <th>Заявка номер</th>
+                    <th>Заявитель</th>
+                    <th>Помещение</th>
+                    <th>Дата</th>
+                    <th>Приоритет</th>
+                    <th>Желаемая дата выполнения</th>
+                    <th>Тема заявки</th>
+                    <th>Описание заявки</th>
+                </tr>
+                {% for application in user_applications %}
+                    <tr>
+                        <td>{{ application[0] }}</td>
+                        <td>{{ application[1] }}</td>
+                        <td>{{ application[2] }}</td>
+                        <td>{{ application[3] }}</td>
+                        <td>{{ application[4] }}</td>
+                        <td>{{ application[5] }}</td>
+                        <td>{{ application[6] }}</td>
+                        <td>{{ application[7] }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>У вас пока нет заявок.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        // Функции для открытия и закрытия модального окна
+        function openModal(id) {
+            var modal = document.getElementById(id);
+            modal.style.display = "block";
+        }
+
+        function closeModal(id) {
+            var modal = document.getElementById(id);
+            modal.style.display = "none";
+        }
+
+        // Закрытие модального окна при щелчке за его пределами
+        window.addEventListener("click", function(event) {
+            var modals = document.getElementsByClassName("modal");
+            for (var i = 0; i < modals.length; i++) {
+                if (event.target == modals[i]) {
+                    modals[i].style.display = "none";
+                }
+            }
+        });
+    </script>
+</body>
+</html>

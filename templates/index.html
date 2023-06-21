@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Service</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bebas+Neue&display=swap">
+    <link rel="stylesheet" href="./static/styles.css">
+    
+    <script>
+        // Функция для отображения сообщения об успехе и кнопки "Мои заявки"
+        function showSuccessMessage() {
+            var applicationForm = document.getElementById("applicationForm");
+            var successMessage = document.getElementById("successMessage");
+            var myApplicationsButton = document.getElementById("myApplicationsButton");
+    
+            applicationForm.style.display = "none";
+            successMessage.style.display = "block";
+            myApplicationsButton.style.display = "block";
+        }
+    
+        // Функция для отображения сообщения об ошибке авторизации
+        function showErrorMessage(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+            var errorMessage = document.getElementById("errorMessage");
+    
+            errorMessage.style.display = "block";
+        }
+    
+        // Функции для открытия и закрытия модального окна
+        function openModal(id) {
+            var modal = document.getElementById(id);
+            modal.style.display = "block";
+        }
+    
+        function closeModal(id) {
+            var modal = document.getElementById(id);
+            modal.style.display = "none";
+        }
+    
+        // Закрытие модального окна при щелчке за его пределами
+        window.addEventListener("click", function(event) {
+            var modals = document.getElementsByClassName("modal");
+            for (var i = 0; i < modals.length; i++) {
+                if (event.target == modals[i]) {
+                    modals[i].style.display = "none";
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="menu">
+        <div style="display: flex; align-items: center; justify-content: flex-start;">
+            <div style="position: fixed; top: 10px; right: 1450px;">
+                <a href="/" style="text-decoration: none;">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Логотип" style="height: 120px;">
+                </a>
+            </div>
+            {% if name %}
+                <p class="auth">Вы авторизованы как {{ name }}</p>
+                <a href="/my_applications" class="btn">Мои заявки</a>
+                <a href="/logout" class="btn">Выйти</a>
+            {% else %}
+                <button onclick="openModal('loginModal')" class="btn">Вход</button>
+                <button onclick="openModal('registerModal')" class="btn">Регистрация</button>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Блок с горизонтальным меню -->
+    <div style="position: fixed; top: 0; right: 0; background-color: #FFFFFF; width: 100%;">
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h2>Вход</h2>
+            <form action="/login" method="post" id="loginForm" onsubmit="submitLoginForm(); return false;">
+                <label for="login-name">Имя пользователя:</label>
+                <input type="text" id="login-name" name="name" required>
+                <label for="login-password">Пароль:</label>
+                <input type="password" id="login-password" name="password" required>
+                <input type="submit" value="Вход" class="btn">
+            </form>
+            <div id="errorMessage" style="display: none; color: red;">Неверное имя пользователя или пароль</div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно для регистрации -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <h2>Регистрация</h2>
+            <form action="/register" method="post">
+                <label for="register-name">Имя:</label>
+                <input type="text" id="register-name" name="name" required>
+                <label for="register-lastname">Фамилия:</label>
+                <input type="text" id="register-lastname" name="second_name" required>
+                <label for="register-email">Email:</label>
+                <input type="email" id="register-email" name="email" required>
+                <label for="register-password">Пароль:</label>
+                <input type="password" id="register-password" name="password" required>
+                <input type="submit" value="Зарегистрироваться" class="btn">
+            </form>
+        </div>
+    </div>
+
+    <div style="margin-top: 170px;">
+        <h1 class="center3">ВЕБ-СЕРВИС ЗАЯВОК<br>ООО "ВТОРЧЕРМЕТ"</h1>
+        <div class="application_form">
+            {% if name %}
+                <div class="form-container" id="applicationForm">
+                    <h2 class="h2">Отправить заявку</h2>
+                    <form action="/submit_application" method="post">
+                        <label for="applicant">Заявитель:</label>
+                        <input type="text" name="applicant" id="applicant" required><br><br>
+                
+                        <label for="room">Помещение:</label>
+                        <input type="text" name="room" id="room" required><br><br>
+                
+                        <label for="date">Дата:</label>
+                        <input type="date" name="date" id="date" required><br><br>
+                
+                        <label for="priority">Приоритет:</label>
+                        <select name="priority" id="priority" required>
+                            <option value="low">Низкий</option>
+                            <option value="medium">Средний</option>
+                            <option value="high">Высокий</option>
+                        </select><br><br>
+                
+                        <label for="desired_date">Желаемая дата выполнения:</label>
+                        <input type="date" name="desired_date" id="desired_date" required><br><br>
+                
+                        <label for="subject">Тема заявки:</label>
+                        <input type="text" name="subject" id="subject" required><br><br>
+                
+                        <label for="description">Описание заявки:</label><br>
+                        <textarea name="description" id="description" rows="4" cols="50" required></textarea><br><br>
+                
+                        <input type="submit" value="Отправить" class="btn">
+                    </form>
+                </div>
+                <div id="successMessage" style="display: none;">
+                    <div>Ваша заявка успешно отправлена</div>
+                    <a href="/my_applications" id="myApplicationsButton" class="btn">Мои заявки</a>
+                </div>
+            {% endif %}
+            {% if not session.get('name') %}
+                <p style="text-align: center;margin-left: 600px; margin-top: 350px; font-size: 50px; max-width: 700px">Для получения доступа к заполнению заявки или их просмотру необходимо авторизоваться</p>
+            {% endif %}
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for message in messages %}
+                            <div class="flash-message">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if error_message %}
+                    <div class="error-message">{{ error_message }}</div>
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+</body>
+</html>

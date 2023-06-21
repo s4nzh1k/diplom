@@ -1,0 +1,63 @@
+!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="menu"> <!-- Меню сверху страницы -->
+        <div style="display: flex; align-items: center; justify-content: flex-start;">
+            <div style="position: fixed; top: 10px; right: 1450px;">
+                <a href="/admin" style="text-decoration: none;">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Логотип" style="height: 120px;">
+                </a>
+            </div>
+            <p style="margin-right: 10px; margin-bottom: 5px;">Вы авторизовались как Администратор</p>
+            <a href="/logout" class="btn">Выйти</a>
+        </div>
+    </div>
+
+    <!-- Блок с горизонтальным меню -->
+    <div style="position: fixed; top: 0; right: 0; background-color: #FFFFFF; width: 100%;">
+    </div>
+
+    <div style="margin-top: 140px;" class="form-container">
+        <h1 class="center2">РЕДАКТИРОВАНИЕ ЗАЯВКИ</h1>
+        <form method="POST" action="/edit/{{ application[0] }}">
+            <div class="form-group">
+                <label for="applicant">Заявитель:</label>
+                <input type="text" id="applicant" name="applicant" value="{{ application[1] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="room">Помещение:</label>
+                <input type="text" id="room" name="room" value="{{ application[2] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="date">Дата:</label>
+                <input type="text" id="date" name="date" value="{{ application[3] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="priority">Приоритет:</label>
+                <input type="text" id="priority" name="priority" value="{{ application[4] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="desired_date">Желаемая дата:</label>
+                <input type="text" id="desired_date" name="desired_date" value="{{ application[5] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="subject">Тема:</label>
+                <input type="text" id="subject" name="subject" value="{{ application[6] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Описание:</label>
+                <textarea id="description" name="description" required>{{ application[7] }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="status">Статус:</label>
+                <textarea id="status" name="status" required>{{ application[8] }}</textarea>
+            </div>
+            <button type="submit" class="btn">Сохранить</button>
+        </form>
+    </div>
+</body>
+</html>

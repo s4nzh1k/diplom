@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <style>
+        table.application {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table.application thead {
+            background-color: #f9f9f9;
+        }
+
+        table.application th,
+        table.application td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        table.application th {
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table.application tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table.application tr:hover {
+            background-color: #ddd;
+        }
+
+        .application_header {
+            margin-bottom: 10px;
+        }
+
+        .btn_edit {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="menu"> <!-- Меню сверху страницы -->
+        <div style="display: flex; align-items: center; justify-content: flex-start;">
+            <div style="position: fixed; top: 10px; right: 1450px;">
+                <a href="/" style="text-decoration: none;">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Логотип" style="height: 120px;">
+                </a>
+            </div>
+            <p style="margin-right: 10px; margin-bottom: 5px;">Вы авторизованы как Администратор</p>
+            <a href="/logout" class="btn">Выйти</a>
+        </div>
+    </div>
+
+    <!-- Блок с горизонтальным меню -->
+    <div style="position: fixed; top: 0; right: 0; background-color: #FFFFFF; width: 100%;">
+    </div>
+
+    <div style="margin-top: 150px;">
+        <h1 class="center1">ПАНЕЛЬ АДМИНИСТРАТОРА ВЕБ-СЕРВИСА ЗАЯВОК<br>ООО "ВТОРЧЕРМЕТ"</h1>
+        
+        <h1 class="application_header">СПИСОК ЗАЯВОК</h1>
+    <table class="application">
+        <thead>
+            <tr>
+                <th>Заявитель</th>
+                <th>Помещение</th>
+                <th>Дата</th>
+                <th>Приоритет</th>
+                <th>Желаемая дата</th>
+                <th>Тема</th>
+                <th>Описание</th>
+                <th>Статус</th>
+                <th>⠀</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for application in applications %}
+            <tr>
+                <td>{{ application[1] }}</td>
+                <td>{{ application[2] }}</td>
+                <td>{{ application[3] }}</td>
+                <td>{{ application[4] }}</td>
+                <td>{{ application[5] }}</td>
+                <td>{{ application[6] }}</td>
+                <td>{{ application[7] }}</td>
+                <td>{{ application[8] }}</td>
+                <td>
+                    <a href="/edit/{{ application[0] }}" class="btn_edit">Изменить</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</body>
+</html>
