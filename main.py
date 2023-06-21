@@ -1,5 +1,6 @@
 import os
-from flask import Flask, render_template, request, redirect, session, flash, get_flashed_messages
+from flask import Flask, render_template, request, redirect, session, flash
+import mysql
 import mysql.connector
 
 app = Flask(__name__)
