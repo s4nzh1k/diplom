@@ -1,6 +1,5 @@
 import os
 from flask import Flask, render_template, request, redirect, session, flash, get_flashed_messages
-from flask_session import Session
 import mysql.connector
 
 app = Flask(__name__)
@@ -24,7 +23,7 @@ def index():
 @app.route('/login', methods=['POST'])
 def login():
     name = request.form['name']
-    password = request.form['pahssword']
+    password = request.form['password']
 
     cursor = db.cursor()
 
